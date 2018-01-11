@@ -114,17 +114,15 @@ if __name__ == '__main__':
                         help='set top size for functions names')
     args = parser.parse_args()
 
-    top_functions_names = collections.Counter()
 
-
-    projects = [
-        './django',
-        './flask',
-        './pyramid',
-        './reddit',
-        './requests',
-        './sqlalchemy',
-    ]
+#     projects = [
+#         './django',
+#         './flask',
+#         './pyramid',
+#         './reddit',
+#         './requests',
+#         './sqlalchemy',
+#     ]
 
     top_functions_names = get_top_functions_name_dict_from_pathes(args.dirs)
 

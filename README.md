@@ -2,7 +2,6 @@
 
 Script search and display functions names in python files in the specified directories.
 
-Script get folder in which you want to remove duplicates and display all duplicate files with file path.
 
 # Using
 
@@ -16,7 +15,7 @@ optional arguments:
   -top_size TOP_SIZE    set top size for functions names (integer)
 
 ```
-and get functions_names like this:
+and get functions names like this:
 ```#!bash
 Found total 39 functions names, 32 unique :
 

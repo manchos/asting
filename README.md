@@ -1,4 +1,4 @@
-# Top names functions
+# Top functions names 
 
 Script search and display functions names in python files in the specified directories.
 

@@ -4,9 +4,9 @@ import collections
 import argparse
 from nltk import pos_tag
 import logging
+import git
 
 logging.basicConfig(level=logging.ERROR)
-
 
 
 
@@ -27,9 +27,14 @@ def load_file_content(filename):
         return attempt_handler.read()
 
 
-def get_files(_path, endswith='.py', max=100):
+def get_files(_path, endswith='.py', max=100, exclude_dirs=['.git']):
     file_list = []
-    for dirname, dirs, files in os.walk(_path, topdown=True):
+    dirs_tree = os.walk(_path, topdown=True)
+    for dirname, dirs, files in dirs_tree:
+        # [dirs.remove(d) for d in dirs if d in set(exclude_dirs)]
+        # if len(dirs) == 1 and (dirs[0] in dirname):
+        if [ _dir for _dir in exclude_dirs if _dir in dirname]:
+            continue
         for file in files:
             if file.endswith(endswith) and len(file_list) < max:
                 file_list.append(os.path.join(dirname, file))
@@ -88,6 +93,7 @@ def get_all_words_in_path(path):
 def get_top_functions_names_in_path(path, top_size=20):
     tree_list = get_tree_list(path)
     trees_node_name_list = [get_node_name_list(node_name) for node_name in tree_list]
+
     functions_names_list = [func for func in flat(trees_node_name_list)
                             if not (func.startswith('__') and func.endswith('__'))]
     return collections.Counter(functions_names_list).most_common(top_size)
@@ -105,6 +111,14 @@ def directory(raw_path):
     if not os.path.isdir(raw_path):
         raise argparse.ArgumentTypeError('"{}" is not an existing directory'.format(raw_path))
     return os.path.abspath(raw_path)
+
+
+def clone_git_repo(
+        repo_url='https://github.com/manchos/test-framework.git',
+        clone_dir='./tmp'):
+    rez = git.Git(clone_dir).clone(repo_url)
+    print(rez)
+
 
 
 if __name__ == '__main__':
@@ -125,6 +139,8 @@ if __name__ == '__main__':
 #     ]
 
     top_functions_names = get_top_functions_name_dict_from_pathes(args.dirs)
+
+    clone_git_repo()
 
     print('\n Found total {} functions names, {} unique \n'.format(
         len(top_functions_names),
